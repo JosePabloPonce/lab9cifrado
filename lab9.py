@@ -94,7 +94,41 @@ def GenerarClaves():
     print(llave_privada)
     print("llave privada base 64:",encodedStr2)
 
+llavePublica = "MzEzMTUxLjQxODM2Nw=="
+llavePrivada = "NTc5OTM1LjQxODM2Nw=="
+
+def Encriptar(llave, mensaje):
+    base64_bytes = llave.encode('ascii')
+    message_bytes = base64.b64decode(base64_bytes)
+    message = message_bytes.decode('ascii')
+    claves = message.split(".")
+    key = int(claves[0])
+    n = int(claves[1])
+    cipher = [pow(ord(char), key, n) for char in mensaje]
+    concatenado = ""
+    for i in cipher:
+        concatenado += str(i)
+    encodedBytes = base64.b64encode(concatenado.encode("utf-8"))
+    encodedStr = str(encodedBytes, "utf-8")
+    print(encodedStr)
     
+    return cipher
+
+def decriptado(llave, mensaje):
+    base64_bytes = llave.encode('ascii')
+    message_bytes = base64.b64decode(base64_bytes)
+    message = message_bytes.decode('ascii')
+    claves = message.split(".")
+    key = int(claves[0])
+    n = int(claves[1])
+#    base64_bytes = mensaje.encode('ascii')
+ #   message_bytes = base64.b64decode(base64_bytes)
+ #   message = message_bytes.decode('ascii')
+ #   print(message)
+    aux = [str(pow(char, key, n)) for char in mensaje]
+    plain = [chr(int(char2)) for char2 in aux]
+    return print(''.join(plain))
+
 while True:
     print("1. Generar claves")
     print("2. Encriptar mensaje")
@@ -107,9 +141,12 @@ while True:
         
     elif(opcion == "2"):
         print("Encriptar mensaje")
+        mensaje = input("Ingrese el mensaje a cifrar:\n")
+        print("Mensaje encriptado:")
+        mensaje_encriptado = Encriptar(llavePublica,mensaje)
     elif(opcion == "3"):
         print("Decriptar mensaje")
+        print("Mensaje decriptado:")
+        decriptado(llavePrivada, mensaje_encriptado)
     elif(opcion == "4"):
         break
-    
-    
